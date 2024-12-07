@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dromara.web.mapper.MhzxMenuMapper">
+
+    <!-- 获取首页列表 --> 
+
+    <!-- getMhzxMenus --> 
+
+    <select id="getMhzxMenus" resultType="MhzxMenu">
+        SELECT mm.* FROM mhzx_menu mm 
+        <where>
+            <if test="titleIds != null and titleIds.size() > 0 ">
+                AND mm.`title_id` IN 
+                <foreach collection="titleIds" item="titleId" open="(" close=")" separator=",">
+                    #{titleId}              
+                </foreach> 
+            </if> 
+        </where> 
+    </select>
+
+    <!-- getList --> 
+
+    <select id="getList" resultType="MhzxMenuTitle">
+        SELECT * FROM mhzx_menu_title mmt
+    </select>
+</mapper>

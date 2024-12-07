@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>wuzhi-mhzx</artifactId>
+        <groupId>org.dromara</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>wuzhi-common-bom</module>
+        <module>wuzhi-common-social</module>
+        <module>wuzhi-common-core</module>
+        <module>wuzhi-common-doc</module>
+        <module>wuzhi-common-excel</module>
+        <module>wuzhi-common-idempotent</module>
+        <module>wuzhi-common-job</module>
+        <module>wuzhi-common-log</module>
+        <module>wuzhi-common-mail</module>
+        <module>wuzhi-common-mybatis</module>
+        <module>wuzhi-common-oss</module>
+        <module>wuzhi-common-ratelimiter</module>
+        <module>wuzhi-common-redis</module>
+        <module>wuzhi-common-satoken</module>
+        <module>wuzhi-common-security</module>
+        <module>wuzhi-common-sms</module>
+        <module>wuzhi-common-web</module>
+        <module>wuzhi-common-translation</module>
+        <module>wuzhi-common-sensitive</module>
+        <module>wuzhi-common-json</module>
+        <module>wuzhi-common-encrypt</module>
+        <module>wuzhi-common-tenant</module>
+        <module>wuzhi-common-websocket</module>
+    </modules>
+
+    <artifactId>wuzhi-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        common 通用模块
+    </description>
+
+</project>

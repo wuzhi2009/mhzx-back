@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dromara.web.mapper.FundMapper">
+
+    <!-- 获取寻访攻略列表 --> 
+
+    <select id="list" resultType="MhzxFund">
+        SELECT mf.`id`, mf.`name`, mf.`text`, mf.`address` FROM mhzx_fund mf 
+        <where>
+           <if test="1==1">AND mf.`flag` = #{flag}</if>
+           <if test="search != '' and search != null"> AND mf.`text` LIKE CONCAT('%',#{search},'%') </if>
+        </where> 
+    </select>
+
+    <!-- 获取灯谜 --> 
+
+    <select id="zhongQiuDengMi" resultType="MhzxFund">
+        SELECT mf.`id`, mf.`name`, mf.`text`, mf.`address`, mf.`flag` FROM mhzx_fund mf
+        <where>
+            <if test="1==1"> AND mf.`flag` IN (6,7,8,9,10,11,12,13,14,15,16) </if>
+            <if test="search != '' and search != null"> AND mf.`text` LIKE CONCAT('%',#{search},'%') </if>
+        </where>
+    </select>
+</mapper>

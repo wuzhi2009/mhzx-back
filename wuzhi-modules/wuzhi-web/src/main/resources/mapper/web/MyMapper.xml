@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dromara.web.mapper.MyMapper">
+
+    <!-- 获取所有公告 --> 
+
+    <select id="getList" resultType="MhzxGongGao">
+        SELECT mgg.*, su.`nick_name` AS `name` FROM mhzx_gong_gao mgg
+        LEFT OUTER JOIN sys_user su ON (mgg.`create_by` = su.`user_id`)
+        <where>
+            <if test="createTime != null"> AND mgg.`create_time` >= #{createTime} </if>
+            <if test="id != null"> AND mgg.`id` = #{id} </if>
+        </where>
+        ORDER BY mgg.`create_time` DESC
+    </select>
+
+    <!-- faBuGongGao --> 
+
+    <insert id="faBuGongGao">
+        INSERT INTO mhzx_gong_gao 
+        (`create_time`, `create_by`, `update_time`, `update_by`, `title`, `content`, `type`)
+        VALUES
+        (#{gongGao.createTime}, 1, #{gongGao.createTime}, 1, #{gongGao.title}, #{gongGao.content}, #{gongGao.type})
+    </insert>
+</mapper>

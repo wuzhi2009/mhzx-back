@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dromara.web.mapper.DocMapper">
+
+
+    <!-- 根据id获取文章 --> 
+
+    <select id="getDocById" resultType="MhzxDoc">
+        SELECT md.`id`, md.`content`, md.`flag`, md.`create_time`, su.`nick_name`, md.`title` FROM mhzx_doc md 
+        LEFT OUTER JOIN sys_user su ON (md.`create_by` = su.`user_id`)
+        <where>
+            <if test="1==1"> AND md.`id` = #{id} </if>
+        </where>
+    </select>    
+
+    <!-- 增加历史记录 --> 
+
+    <insert id="addHistory">
+        INSERT INTO mhzx_doc_history 
+        (
+            `create_time`, `create_by`, 
+            `update_by`, `update_time`, 
+            `doc_id`, `doc_flag`
+        ) 
+        VALUES 
+        <foreach collection="historys" item="history" separator=",">
+        (
+            #{history.createTime}, #{history.createBy},
+            #{history.updateBy}, #{history.updateTime},
+            #{history.docId}, #{docFlag}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 获取文章列表 --> 
+
+    <select id="list" resultType="MhzxDoc">
+        SELECT md.`id`, md.`content`, md.`flag`, md.`create_time`, su.`nick_name`, md.`title` FROM mhzx_doc md 
+        LEFT OUTER JOIN sys_user su ON (md.`create_by` = su.`user_id`)
+        <where>
+            <if test="1==1"> AND md.`flag` = 1 </if>
+        </where>
+    </select>
+
+    <!-- 用户访问记录统计 --> 
+
+    <select id="count" resultType="UserHistoryCount">
+        SELECT md.`menu_id`, COUNT(*) count FROM mhzx_doc_history mdh
+        LEFT OUTER JOIN mhzx_doc md ON (mdh.`doc_id` = md.`id`)
+        <where>
+            <if test="1==1"> AND md.`create_by` = #{userId} </if>
+            <if test="1==1"> AND md.`flag` = 1 </if>
+            <!-- 只统计用户查看的文章 不统计公告 -->
+            <if test="1==1"> AND mdh.`doc_flag` = 1 </if>
+        </where>
+        GROUP BY md.`menu_id`
+    </select>
+
+    <!-- add --> 
+
+    <insert id="add">
+        INSERT INTO mhzx_doc 
+        (create_by, create_time, update_by, update_time, content, title, flag)
+        VALUES
+        (1, #{time}, 1, #{time}, #{content}, "标题", 1)
+    </insert>
+
+    <!-- 更新用户历史记录 --> 
+
+    <update id="updateHistory">
+        UPDATE mhzx_doc_history 
+        <set>
+            `update_time` = #{updateTime},
+        </set>
+        <where>
+            <if test="1==1"> 
+                AND `doc_id` IN 
+                <foreach collection="historys" item="history" open="(" separator="," close=")">
+                    #{history.docId} 
+                </foreach>
+            </if> 
+            <if test="1==1"> AND `create_by` = #{createBy} </if> 
+            <if test="1==1"> AND `doc_flag` = #{docFlag} </if>
+        </where>
+    </update>
+
+    <!-- 获取面包屑信息 --> 
+
+    <select id="getMenuInfoByPath" resultType="MhzxMenu">
+        SELECT mm.*, mmt.title AS titleName FROM mhzx_menu mm
+        LEFT OUTER JOIN mhzx_menu_title mmt ON (mm.title_id = mmt.id)
+        <where>
+            <if test="1==1"> AND mm.`url` = #{path} </if>
+        </where>
+    </select>
+
+    <!-- 获取科举题目 --> 
+
+    <select id="getKeJuTiMu" resultType="MhzxKeJu">
+        SELECT * FROM mhzx_ke_ju mkj
+        <where>
+            <if test="title != null and title != ''"> AND mkj.`title` LIKE CONCAT('%',#{title},'%') </if>
+            <if test="flag != null"> AND mkj.`flag` = #{flag} </if>
+        </where>
+    </select>
+
+    <!-- 根据用户id获取访问记录 --> 
+
+    <select id="getHistoryByUserId" resultType="MhzxDocHistory">
+        SELECT mdh.* FROM mhzx_doc_history mdh
+        <where>
+            <if test="1==1"> AND mdh.`create_by` = #{userId} </if>
+        </where>
+    </select>
+    
+</mapper>
